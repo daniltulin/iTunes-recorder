@@ -18,8 +18,7 @@ class Tunes(Mapping):
 
     def play(self, track):
         self.app.play(track)
-        while self.state == 'playing':
-            sleep(.5)
+        sleep(track.duration())
 
     def stop(self):
         self.app.stop()
