@@ -22,7 +22,7 @@ class Event(dict):
                                     scheduleMode=0,
                                     scheduleEnabled=True,
                                     scheduleSingleDate=single_date,
-                                    scheduleDuration=track.duration(),
+                                    scheduleDuration=track.duration() + 1,
                                     scheduleQuitSources=False)
         self['sessionUUID'] = session['sessionUUID']
         self['scheduleStartTime'] = start_time.seconds
