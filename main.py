@@ -17,7 +17,7 @@ class Application:
         playlist = self.tunes['iPod\'s playlist']
         for track in playlist.tracks():
             logging.debug('{0}-{1}'.format(track.artist(), track.name()))
-            self.jack.start_recording(track)
+            self.jack.start_recording('~/Music/iPod', track)
             self.tunes.play(track)
             self.tunes.stop()
 
@@ -25,8 +25,8 @@ app = Application()
 
 try:
     app.run()
-except:
-    logging.error('Exit due to exception')
+except Exception as e:
+    logging.error(e)
 finally:
     app.tunes.stop()
     app.jack.kill()
