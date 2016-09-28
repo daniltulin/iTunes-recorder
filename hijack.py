@@ -3,6 +3,7 @@ from subprocess import Popen, PIPE
 from os.path import join
 from datetime import datetime
 from plistlib import dump, load
+import logging
 
 class LaunchException(Exception): pass
 
@@ -27,11 +28,16 @@ class Event(dict):
         self['scheduleStartTime'] = start_time.seconds
 
 class Session(dict):
-    def __init__(self, filepath):
-        with open(filepath, 'rb') as f:
-            session = load(f)['modelItems'][0]
-            super(Session, self).__init__(session)
-
+    def __init__(self, session, track):
+        super(Session, self).__init__(session)
+        session_data = self['sessionData']
+        blocks = session_data['geBlocks']
+        recorder = blocks[1] # 0 is iTunes app block
+        properties = recorder['geNodeProperties']
+        file_name= '{0}_{1}'.format(track.artist(),
+                                    track.name())
+        properties['fileName'] = file_name
+        logging.debug('Write filename ' + file_name)
 
 class Jack:
     def start_recording(self, track):
