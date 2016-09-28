@@ -19,6 +19,7 @@ class Application:
             logging.debug('{0}-{1}'.format(track.artist(), track.name()))
             self.jack.start_recording(track)
             self.tunes.play(track)
+            self.tunes.stop()
 
 app = Application()
 app.run()
