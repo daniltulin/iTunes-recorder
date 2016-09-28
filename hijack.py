@@ -42,6 +42,15 @@ class Session(dict):
 class Jack:
     def start_recording(self, track):
         self.kill()
+
+        with open(SESSIONS_PATH, 'rb') as f:
+            sessions = load(f)
+            session, = sessions['modelItems']
+        new_session = Session(session, track)
+        sessions['modelItems'] = [new_session]
+        with open(SESSIONS_PATH, 'wb') as f:
+            dump(sessions, f)
+
         with open(SCHEDULE_PATH, 'rb') as f:
             schedule = load(f)
         schedule['modelItems'] = [Event(track)]
