@@ -5,6 +5,9 @@ from time import sleep
 from hijack import Jack
 from iTunes import Tunes
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 class Application:
     def __init__(self):
         self.tunes = Tunes()
@@ -12,7 +15,8 @@ class Application:
 
     def run(self):
         playlist = self.tunes['iPod\'s playlist']
-        for track in playlist:
+        for track in playlist.tracks():
+            logging.debug('{0}-{1}'.format(track.artist(), track.name()))
             self.jack.start_recording(track)
             self.tunes.play(track)
 
