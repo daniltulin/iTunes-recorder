@@ -36,7 +36,7 @@ class Jack:
 
     def launch(self):
         if system('open -a ' + APP_PATH) > 0:
-            raise LaunchError()
+            raise LaunchException()
 
     def kill(self):
         p = Popen(['ps', '-A'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
