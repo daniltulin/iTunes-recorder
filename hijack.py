@@ -39,14 +39,6 @@ class Session(dict):
         properties['fileName'] = file_name
         properties['folderPathWithTilde'] = folder_path
 
-        tags = properties['tagsPlist']
-        tags['Artist'] = track.artist()
-        tags['Title'] = track.name()
-        tags['Year'] = track.year()
-        tags['Album'] = track.album()
-
-        logging.debug('Write filename ' + file_name)
-
 class Jack:
     def start_recording(self, folder_path, track):
         self.kill()
