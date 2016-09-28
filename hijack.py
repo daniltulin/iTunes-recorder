@@ -8,7 +8,9 @@ class LaunchException(Exception): pass
 
 APP_PATH = '/Applications/Audio\ Hijack.app'
 META_PATH = path.expanduser('~/Library/Application Support/Audio Hijack')
+
 SCHEDULE_PATH = join(META_PATH, 'Schedule.plist')
+SESSIONS_PATH = join(META_PATH, 'Sessions.plist')
 
 class Event(dict):
     def __init__(self, track):
@@ -23,6 +25,13 @@ class Event(dict):
                                     scheduleQuitSources=False)
         self['sessionUUID'] = '0B2BCFF7-2D43-4F74-A393-FDAADCA633B8'
         self['scheduleStartTime'] = start_time.seconds
+
+class Session(dict):
+    def __init__(self, filepath):
+        with open(filepath, 'rb') as f:
+            session = load(f)['modelItems'][0]
+            super(Session, self).__init__(session)
+
 
 class Jack:
     def start_recording(self, track):
