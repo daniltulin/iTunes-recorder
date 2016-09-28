@@ -28,25 +28,26 @@ class Event(dict):
         self['scheduleStartTime'] = start_time.seconds
 
 class Session(dict):
-    def __init__(self, session, track):
+    def __init__(self, session, folder_path, track):
         super(Session, self).__init__(session)
         session_data = self['sessionData']
         blocks = session_data['geBlocks']
         recorder = blocks[1] # 0 is iTunes app block
         properties = recorder['geNodeProperties']
         file_name= '{0}_{1}'.format(track.artist(),
-                                    track.name())
+                                    track.name()).replace(' ', '_')
         properties['fileName'] = file_name
+        properties['folderPathWithTilde'] = folder_path
         logging.debug('Write filename ' + file_name)
 
 class Jack:
-    def start_recording(self, track):
+    def start_recording(self, folder_path, track):
         self.kill()
 
         with open(SESSIONS_PATH, 'rb') as f:
             sessions = load(f)
             session, = sessions['modelItems']
-        new_session = Session(session, track)
+        new_session = Session(session, folder_path, track)
         sessions['modelItems'] = [new_session]
         with open(SESSIONS_PATH, 'wb') as f:
             dump(sessions, f)
