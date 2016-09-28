@@ -27,8 +27,12 @@ class Event(dict):
 class Jack:
     def start_recording(self, track):
         self.kill()
-
-        self.start()
+        with open(SCHEDULE_PATH, 'rb') as f:
+            schedule = load(f)
+        schedule['modelItems'] = [Event(track)]
+        with open(SCHEDULE_PATH, 'wb') as f:
+            dump(schedule, f)
+        self.launch()
 
     def launch(self):
         if system('open -a ' + APP_PATH) > 0:
