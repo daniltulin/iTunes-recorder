@@ -25,8 +25,8 @@ app = Application()
 
 try:
     app.run()
-except:
-    logging.error('Exit due to exception')
+except Exception as e:
+    logging.error(e)
 finally:
     app.tunes.stop()
     app.jack.kill()
