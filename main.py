@@ -18,6 +18,7 @@ class Application:
         for track in playlist.tracks():
             logging.debug('{0}-{1}'.format(track.artist(), track.name()))
             self.jack.start_recording('~/Music/iPod', track)
+            sleep(.4)
             self.tunes.play(track)
             self.tunes.stop()
 
