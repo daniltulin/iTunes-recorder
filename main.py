@@ -22,4 +22,11 @@ class Application:
             self.tunes.stop()
 
 app = Application()
-app.run()
+
+try:
+    app.run()
+except:
+    logging.error('Exit due to exception')
+finally:
+    app.tunes.stop()
+    app.jack.kill()
