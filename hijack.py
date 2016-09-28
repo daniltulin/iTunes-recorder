@@ -38,6 +38,13 @@ class Session(dict):
                                     track.name()).replace(' ', '_')
         properties['fileName'] = file_name
         properties['folderPathWithTilde'] = folder_path
+
+        tags = properties['tagsPlist']
+        tags['Artist'] = track.artist()
+        tags['Title'] = track.name()
+        tags['Year'] = track.year()
+        tags['Album'] = track.album()
+
         logging.debug('Write filename ' + file_name)
 
 class Jack:
