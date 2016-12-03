@@ -1,6 +1,6 @@
-from os import system, path
+from os import system
 from subprocess import Popen, PIPE
-from os.path import join
+from os.path import join, expanduser, isfile
 from datetime import datetime
 from plistlib import dump, load
 import logging
@@ -8,7 +8,7 @@ import logging
 class LaunchException(Exception): pass
 
 APP_PATH = '/Applications/Audio\ Hijack.app'
-META_PATH = path.expanduser('~/Library/Application Support/Audio Hijack')
+META_PATH = expanduser('~/Library/Application Support/Audio Hijack')
 
 SCHEDULE_PATH = join(META_PATH, 'Schedule.plist')
 SESSIONS_PATH = join(META_PATH, 'Sessions.plist')
@@ -27,6 +27,14 @@ class Event(dict):
         self['sessionUUID'] = session['sessionUUID']
         self['scheduleStartTime'] = start_time.seconds
 
+def get_track_fs_name(track):
+    return '{0}_{1}'.format(track.artist(),
+                            track.name()).replace(' ', '_')
+
+def does_contain_track(folder_path, track):
+    return isfile(join(expanduser(folder_path),
+                  get_track_fs_name(track)) + '.mp3')
+
 class Session(dict):
     def __init__(self, session, folder_path, track):
         super(Session, self).__init__(session)
@@ -34,8 +42,7 @@ class Session(dict):
         blocks = session_data['geBlocks']
         recorder = blocks[1] # 0 is iTunes app block
         properties = recorder['geNodeProperties']
-        file_name= '{0}_{1}'.format(track.artist(),
-                                    track.name()).replace(' ', '_')
+        file_name = get_track_fs_name(track)
         properties['fileName'] = file_name
         properties['folderPathWithTilde'] = folder_path
 
